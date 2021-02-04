@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>3ea60cc6-1e90-414e-bee4-967311559e06.SCHEMA:cashmanagementsystem</OriginalElement>
+  <nodes>
+    <node x="166.0" y="0.0">3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.merchant</node>
+    <node x="78.5" y="325.0">3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.payment</node>
+    <node x="0.0" y="44.0">3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.customer</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.payment" target="3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.merchant">
+      <point x="42.75" y="-93.5" />
+      <point x="206.75" y="300.0" />
+      <point x="255.0" y="300.0" />
+      <point x="0.0" y="137.5" />
+    </edge>
+    <edge source="3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.payment" target="3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.customer">
+      <point x="-42.75" y="-93.5" />
+      <point x="121.25" y="300.0" />
+      <point x="73.0" y="300.0" />
+      <point x="0.0" y="93.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="172.0" y="256.0" />
+  <SelectedNodes>
+    <node>3ea60cc6-1e90-414e-bee4-967311559e06.TABLE:cashmanagementsystem.customer</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
