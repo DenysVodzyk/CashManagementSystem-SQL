@@ -41,4 +41,14 @@ public class MerchantService {
         return merchants;
     }
 
+    public Merchant getById(int id) {
+        Merchant merchantToReturn = null;
+        for (Merchant merchant : merchants) {
+            if (merchant.getId() == id) {
+                merchantToReturn = merchant;
+            }
+        }
+        return merchantToReturn;
+    }
+
 }
