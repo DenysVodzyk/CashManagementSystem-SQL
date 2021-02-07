@@ -1,21 +1,21 @@
 package Entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Payment {
     private int id;
-    private LocalDate dt;
+    private LocalDateTime dt;
     private int merchantId;
     private int customerId;
     private String goods;
     private double sumPaid;
     private double chargePaid;
 
-    public Payment(int id, LocalDate dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
+    public Payment(int id, LocalDateTime dt, int merchantId, int customerId, String goods, double sumPaid, double chargePaid) {
         this.id = id;
         this.dt = dt;
-        this.merchantId = merchant.getId();
-        this.customerId = customer.getId();
+        this.merchantId = merchantId;
+        this.customerId = customerId;
         this.goods = goods;
         this.sumPaid = sumPaid;
         this.chargePaid = chargePaid;
@@ -29,11 +29,11 @@ public class Payment {
         this.id = id;
     }
 
-    public LocalDate getDt() {
+    public LocalDateTime getDt() {
         return dt;
     }
 
-    public void setDt(LocalDate dt) {
+    public void setDt(LocalDateTime dt) {
         this.dt = dt;
     }
 
