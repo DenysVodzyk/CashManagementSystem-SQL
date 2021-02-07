@@ -12,12 +12,16 @@ import java.util.List;
 public class PaymentService {
 
     private List<Payment> payments = new ArrayList<>();
+    private CustomerService customerService = new CustomerService();
+    private MerchantService merchantService = new MerchantService();
 
     public boolean readFromDB() throws IOException, SQLException {
         Connection con = DBConnection.getConnection();
         String sql = "SELECT * FROM payment";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs = stm.executeQuery();
+        customerService.readFromDB();
+        merchantService.readFromDB();
 
         while (rs.next()) {
             int id = rs.getInt("id");
@@ -29,7 +33,7 @@ public class PaymentService {
             double sumPaid = rs.getDouble("sumPaid");
             double chargePaid = rs.getDouble("chargePaid");
 
-            payments.add(new Payment(id, dt, merchantId, customerId, goods, sumPaid, chargePaid));
+            payments.add(new Payment(id, dt, merchantService.getById(merchantId), customerService.getById(customerId), goods, sumPaid, chargePaid));
         }
         return !payments.isEmpty();
     }
@@ -38,12 +42,3 @@ public class PaymentService {
         return payments;
     }
 }
-
-//   public void readCustomerMerchantDB() {
-//        try {
-//            customerService.readFromDB();
-//            merchantService.readFromDB();
-//        } catch (IOException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
