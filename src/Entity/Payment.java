@@ -10,15 +10,19 @@ public class Payment {
     private String goods;
     private double sumPaid;
     private double chargePaid;
+    private Merchant merchant;
+    private Customer customer;
 
-    public Payment(int id, LocalDateTime dt, int merchantId, int customerId, String goods, double sumPaid, double chargePaid) {
+    public Payment(int id, LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
         this.id = id;
         this.dt = dt;
-        this.merchantId = merchantId;
-        this.customerId = customerId;
+        this.merchantId = merchant.getId();
+        this.customerId = customer.getId();
         this.goods = goods;
         this.sumPaid = sumPaid;
         this.chargePaid = chargePaid;
+        this.customer = customer;
+        this.merchant = merchant;
     }
 
     public int getId() {
@@ -77,6 +81,22 @@ public class Payment {
         this.chargePaid = chargePaid;
     }
 
+    public Merchant getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
         return "Payment{" +
@@ -87,6 +107,8 @@ public class Payment {
                 ", goods='" + goods + '\'' +
                 ", sumPaid=" + sumPaid +
                 ", chargePaid=" + chargePaid +
+                ", merchant=" + merchant +
+                ", customer=" + customer +
                 '}';
     }
 }
