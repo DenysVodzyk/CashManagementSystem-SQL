@@ -38,5 +38,15 @@ public class CustomerService {
     public List<Customer> getCustomers() {
         return customers;
     }
-    
+
+    public Customer getById(int id) {
+        Customer customerToReturn = null;
+        for (Customer customer : customers) {
+            if (customer.getId() == id) {
+                customerToReturn = customer;
+            }
+        }
+        return customerToReturn;
+    }
+
 }
