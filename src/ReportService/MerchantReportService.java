@@ -15,6 +15,7 @@ public class MerchantReportService {
         paymentService.readFromDB();
     }
 
+    // Lesson 7 - clause 2
     public String totalSumPaid(int id) {
         String title = "";
         LocalDate lastSent = null;
@@ -31,6 +32,7 @@ public class MerchantReportService {
                 + ", last sent: " + lastSent;
     }
 
+    //Lesson 7 - Clause 3
     public TreeSet<String> sortedDescendingOrder() {
         TreeSet<String> merchantsByName = new TreeSet<>();
         for (Payment payment : paymentService.getPayments())
