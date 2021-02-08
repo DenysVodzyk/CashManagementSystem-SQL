@@ -5,6 +5,7 @@ import Entity.Payment;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,4 +42,24 @@ public class PaymentService {
     public List<Payment> getPayments() {
         return payments;
     }
+
+    public List<Payment> getPaymentFromTimeInterval(LocalDate startDate, LocalDate endDate, List<Payment> payments) {
+        List<Payment> paymentsFromTimeInterval = new ArrayList<>();
+        for (Payment p : payments) {
+            if (p.getDt().toLocalDate().compareTo(startDate) >= 0 && p.getDt().toLocalDate().compareTo(endDate) <= 0) {
+                paymentsFromTimeInterval.add(p);
+            }
+        }
+        return paymentsFromTimeInterval;
+    }
+
 }
+
+//    public static void main(String[] args) throws IOException, SQLException {
+//        PaymentService paymentService = new PaymentService();
+//        paymentService.readFromDB();
+//        for (Payment p : paymentService.getPaymentFromTimeInterval(LocalDate.of(2012, 06, 22), LocalDate.of(2012, 07, 02), paymentService.getPayments())){
+//            System.out.println(p);
+//        }
+//
+//    }
