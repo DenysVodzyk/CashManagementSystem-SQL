@@ -1,13 +1,19 @@
+import DBUtils.PaymentRepository;
 import Entity.Customer;
 import Entity.Merchant;
 import ReportService.CustomerReportService;
 import Entity.Payment;
 import ReportService.MerchantReportService;
+import Service.CustomerService;
+import Service.MerchantService;
 import Service.PaymentService;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.TreeSet;
 
 public class Main {
@@ -34,10 +40,18 @@ public class Main {
         System.out.println("");
 
 
-        // add entry to payment table - Clause 4
-//        PaymentTableService paymentTableService = new PaymentTableService();
-//        java.sql.Timestamp dt = java.sql.Timestamp.valueOf("2020-10-10 02:10:45");
-//        paymentTableService.addPayment(dt, 3, 3, "rower", 2000, 50);
+        //     add entry to payment table - Clause 4
+//        PaymentRepository paymentRepository = new PaymentRepository();
+//        LocalDateTime dt = LocalDateTime.of(2020, 12, 12, 00, 00, 00);
+//        MerchantService merchantService = new MerchantService();
+//        CustomerService customerService = new CustomerService();
+//        merchantService.readFromDB();
+//        customerService.readFromDB();
+//
+//        Merchant merchant_3 = merchantService.getById(3);
+//        Customer customer_3 = customerService.getById(3);
+//        Payment newPayment = new Payment(dt, merchant_3, customer_3, "elliptical", 1500, 27);
+//        paymentRepository.addPayment(newPayment);
 
 
         //most active customer - Clause 7
