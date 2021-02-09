@@ -12,14 +12,18 @@ public class Customer {
     private String ccType;
     private LocalDate maturity;
 
-    public Customer(int id, String name, String address, String email, String ccNo, String ccType, LocalDate maturity) {
-        this.id = id;
+    public Customer(String name, String address, String email, String ccNo, String ccType, LocalDate maturity) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.ccNo = ccNo;
         this.ccType = ccType;
         this.maturity = maturity;
+    }
+
+    public Customer(int id, String name, String address, String email, String ccNo, String ccType, LocalDate maturity) {
+        this(name, address, email, ccNo, ccType, maturity);
+        this.id = id;
     }
 
     public int getId() {
