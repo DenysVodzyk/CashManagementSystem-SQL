@@ -46,20 +46,20 @@ public class PaymentService {
     public List<Payment> getPaymentFromTimeInterval(LocalDate startDate, LocalDate endDate, List<Payment> payments) {
         List<Payment> paymentsFromTimeInterval = new ArrayList<>();
         for (Payment p : payments) {
-            if (p.getDt().toLocalDate().compareTo(startDate) >= 0 && p.getDt().toLocalDate().compareTo(endDate) <= 0) {
+            if (!p.getDt().toLocalDate().isBefore(startDate) && !p.getDt().toLocalDate().isAfter(endDate)) {
                 paymentsFromTimeInterval.add(p);
             }
         }
         return paymentsFromTimeInterval;
     }
-
 }
 
 //    public static void main(String[] args) throws IOException, SQLException {
 //        PaymentService paymentService = new PaymentService();
 //        paymentService.readFromDB();
-//        for (Payment p : paymentService.getPaymentFromTimeInterval(LocalDate.of(2012, 06, 22), LocalDate.of(2012, 07, 02), paymentService.getPayments())){
+//        for (Payment p : paymentService.getPaymentFromTimeInterval(LocalDate.of(2012, 06, 22), LocalDate.of(2012, 07, 02), paymentService.getPayments())) {
 //            System.out.println(p);
 //        }
 //
 //    }
+// }
