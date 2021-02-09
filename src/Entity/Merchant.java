@@ -15,8 +15,7 @@ public class Merchant {
     private double sent;
     private LocalDate lastSent;
 
-    public Merchant(int id, String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
-        this.id = id;
+    public Merchant(String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
         this.name = name;
         this.bankName = bankName;
         this.swift = swift;
@@ -27,6 +26,11 @@ public class Merchant {
         this.needToSend = needToSend;
         this.sent = sent;
         this.lastSent = lastSent;
+    }
+
+    public Merchant(int id, String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
+        this(name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
+        this.id = id;
     }
 
     public int getId() {
