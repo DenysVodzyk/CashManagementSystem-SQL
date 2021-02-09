@@ -13,8 +13,7 @@ public class Payment {
     private Merchant merchant;
     private Customer customer;
 
-    public Payment(int id, LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
-        this.id = id;
+    public Payment(LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
         this.dt = dt;
         this.merchantId = merchant.getId();
         this.customerId = customer.getId();
@@ -23,6 +22,11 @@ public class Payment {
         this.chargePaid = chargePaid;
         this.customer = customer;
         this.merchant = merchant;
+    }
+
+    public Payment(int id, LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
+        this(dt, merchant, customer, goods, sumPaid, chargePaid);
+        this.id = id;
     }
 
     public int getId() {
