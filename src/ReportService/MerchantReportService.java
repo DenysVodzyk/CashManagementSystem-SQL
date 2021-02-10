@@ -3,17 +3,11 @@ package ReportService;
 import Entity.Payment;
 import Service.PaymentService;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class MerchantReportService {
     PaymentService paymentService = new PaymentService();
-
-    public MerchantReportService() throws IOException, SQLException {
-        paymentService.readFromDB();
-    }
 
     // Lesson 7 - clause 2
     public String totalSumPaid(int id) {
@@ -21,7 +15,7 @@ public class MerchantReportService {
         LocalDate lastSent = null;
         double totalSum = 0;
 
-        for (Payment payment : paymentService.getPayments()) {
+        for (Payment payment : paymentService.getAll()) {
             if (payment.getMerchantId() == id) {
                 title = payment.getMerchant().getName();
                 lastSent = payment.getMerchant().getLastSent();
@@ -33,11 +27,11 @@ public class MerchantReportService {
     }
 
     //Lesson 7 - Clause 3
-    public TreeSet<String> sortedDescendingOrder() {
-        TreeSet<String> merchantsByName = new TreeSet<>();
-        for (Payment payment : paymentService.getPayments())
+    public Set<String> sortedDescendingOrder() {
+        Set<String> merchantsByName = new TreeSet<>();
+        for (Payment payment : paymentService.getAll())
             merchantsByName.add(payment.getMerchant().getName());
-        TreeSet<String> merchantsByNameDescend = (TreeSet<String>) merchantsByName.descendingSet();
+        Set<String> merchantsByNameDescend = ((TreeSet<String>) merchantsByName).descendingSet();
         return merchantsByNameDescend;
     }
 }
