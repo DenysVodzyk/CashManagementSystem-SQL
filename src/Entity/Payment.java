@@ -13,20 +13,20 @@ public class Payment {
     private Merchant merchant;
     private Customer customer;
 
-    public Payment(LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
+    public Payment(LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid) {
         this.dt = dt;
         this.merchantId = merchant.getId();
         this.customerId = customer.getId();
         this.goods = goods;
         this.sumPaid = sumPaid;
-        this.chargePaid = chargePaid;
         this.customer = customer;
         this.merchant = merchant;
     }
 
     public Payment(int id, LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid, double chargePaid) {
-        this(dt, merchant, customer, goods, sumPaid, chargePaid);
+        this(dt, merchant, customer, goods, sumPaid);
         this.id = id;
+        this.chargePaid = chargePaid;
     }
 
     public int getId() {
