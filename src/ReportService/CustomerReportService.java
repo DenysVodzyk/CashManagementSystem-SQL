@@ -18,15 +18,15 @@ public class CustomerReportService {
     CustomerService customerService = new CustomerService();
 
     public Customer getMostActiveCustomer(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
-        customerService.readFromDB();
+        customerService.getAll();
         int id = mostActiveCustomerId(startDate, endDate);
         return customerService.getById(id);
     }
 
     public int mostActiveCustomerId(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
-        paymentService.readFromDB();
+        paymentService.getAll();
         List<Integer> customersId = new ArrayList<>();
-        List<Payment> paymentsFromInterval = paymentService.getPaymentFromTimeInterval(startDate, endDate, paymentService.getPayments());
+        List<Payment> paymentsFromInterval = paymentService.getPaymentFromTimeInterval(startDate, endDate);
 
         for (Payment payment : paymentsFromInterval) {
             customersId.add(payment.getCustomerId());
