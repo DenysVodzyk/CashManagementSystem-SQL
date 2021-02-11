@@ -1,14 +1,10 @@
-import Repository.PaymentRepository;
-import Entity.Customer;
 import Entity.Merchant;
 import Entity.Payment;
 import ReportService.CustomerReportService;
 import ReportService.MerchantReportService;
-import Service.CustomerService;
 import Service.MerchantService;
 import Service.PaymentService;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public class PrintReport {
@@ -27,12 +23,13 @@ public class PrintReport {
         System.out.println("");
 
         //Total sum paid for a merchant - Clause 2
-        String totalSum = merchantReportService.totalSumPaid(2);
+        Merchant merchant = merchantService.getById(2);
+        String totalSum = merchantReportService.totalSumPaid(merchant);
         System.out.println(totalSum);
         System.out.println("");
 
         //List of merchants sorted alphabetically by name in descending order - Clause 3
-        Set<String> sortedMerchants = merchantReportService.sortedDescendingOrder();
+        Set<String> sortedMerchants = merchantReportService.sortBasedOnOrder("desc");
         System.out.println(sortedMerchants);
         System.out.println("");
 
@@ -62,10 +59,6 @@ public class PrintReport {
             System.out.println(m);
         }
         System.out.println("");
-
-
-
-
 
 
 //        most active customer - Clause 7
