@@ -13,15 +13,11 @@ public class MerchantRepository {
 
     public List<Merchant> getAll() {
         List<Merchant> merchants = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement stm = null;
+        String sql = "SELECT * FROM merchant";
 
-        try {
-            con = DBConnection.getConnection();
-            String sql = "SELECT * FROM merchant";
-            stm = con.prepareStatement(sql);
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
-
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -40,41 +36,25 @@ public class MerchantRepository {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    stm.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
         return merchants;
     }
 
-    public void update(Payment payment) {
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = DBConnection.getConnection();
-            String sql = "UPDATE merchant SET needToSend = ? WHERE id = ?";
-            stm = con.prepareStatement(sql);
+    //Lesson 7, clause 4
+    public void updateNeedToSend(Payment payment) {
+        String sql = "UPDATE merchant SET needToSend = ? WHERE id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
             double needToSend = payment.getMerchant().getNeedToSend() + (payment.getSumPaid() - payment.getMerchant().getCharge());
             stm.setDouble(1, needToSend);
             stm.setInt(2, payment.getMerchantId());
+            stm.executeUpdate();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    stm.executeUpdate();
-                    stm.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
-
     }
+
+
 
 }

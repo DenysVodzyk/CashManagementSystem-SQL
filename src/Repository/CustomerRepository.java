@@ -10,16 +10,13 @@ import java.util.List;
 
 public class CustomerRepository {
     List<Customer> customers = new ArrayList<>();
+    String sql = "SELECT * FROM customer";
 
     public List<Customer> getAll() {
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = DBConnection.getConnection();
-            String sql = "SELECT * FROM customer";
-            stm = con.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
 
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -34,14 +31,6 @@ public class CustomerRepository {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    stm.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
         return customers;
     }

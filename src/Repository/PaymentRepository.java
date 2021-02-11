@@ -5,7 +5,6 @@ import Service.CustomerService;
 import Service.MerchantService;
 
 import java.io.IOException;
-import java.security.PrivateKey;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,12 +17,10 @@ public class PaymentRepository {
 
     public List<Payment> getAll() {
         List<Payment> payments = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = DBConnection.getConnection();
-            String sql = "SELECT * FROM payment";
-            stm = con.prepareStatement(sql);
+        String sql = "SELECT * FROM payment";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -39,26 +36,16 @@ public class PaymentRepository {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    stm.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
         return payments;
     }
 
     //Lesson 7, clause 4
     public void addPayment(Payment payment) {
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = DBConnection.getConnection();
-            String sql = "INSERT INTO payment(dt, merchantId, customerId, goods, sumPaid, chargePaid) VALUES (?,?,?,?,?,?)";
-            stm = con.prepareStatement(sql);
+        String sql = "INSERT INTO payment(dt, merchantId, customerId, goods, sumPaid, chargePaid) VALUES (?,?,?,?,?,?)";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
             java.sql.Timestamp dt = java.sql.Timestamp.valueOf(payment.getDt());
             stm.setTimestamp(1, dt);
             stm.setInt(2, payment.getMerchantId());
@@ -67,18 +54,10 @@ public class PaymentRepository {
             stm.setDouble(5, payment.getSumPaid());
             payment.setChargePaid(payment.getSumPaid() * payment.getMerchant().getCharge() / 100);
             stm.setDouble(6, payment.getChargePaid());
-            merchantRepository.update(payment);
+            merchantRepository.updateNeedToSend(payment);
+            stm.executeUpdate();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    stm.executeUpdate();
-                    stm.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
     }
 }
