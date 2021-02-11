@@ -1,5 +1,6 @@
-package DBUtils;
+package Repository;
 
+import DBUtils.DBConnection;
 import Entity.Customer;
 
 import java.io.IOException;
