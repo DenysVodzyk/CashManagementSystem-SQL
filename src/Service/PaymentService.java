@@ -1,6 +1,6 @@
 package Service;
 
-import DBUtils.PaymentRepository;
+import Repository.PaymentRepository;
 import Entity.Payment;
 
 import java.time.LocalDate;
