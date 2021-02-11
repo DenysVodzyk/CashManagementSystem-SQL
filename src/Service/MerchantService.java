@@ -1,8 +1,9 @@
 package Service;
 
-import DBUtils.MerchantRepository;
+import Repository.MerchantRepository;
 import Entity.Merchant;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class MerchantService {
@@ -21,5 +22,19 @@ public class MerchantService {
         }
         return merchantById;
     }
+
+    //Lesson 7, clause 5
+    public void sendFunds() {
+        for (Merchant merchant : getAll()) {
+            if (merchant.getNeedToSend() >= merchant.getMinSum()) {
+                merchant.setLastSent(LocalDate.now());
+                double total = merchant.getSent() + merchant.getNeedToSend();
+                merchant.setSent(total);
+                merchant.setNeedToSend(0);
+                merchantRepository.updateSendFunds(merchant);
+            }
+        }
+    }
+
 
 }
