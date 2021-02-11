@@ -1,6 +1,6 @@
 package Service;
 
-import DBUtils.CustomerRepository;
+import Repository.CustomerRepository;
 import Entity.Customer;
 
 import java.util.List;
