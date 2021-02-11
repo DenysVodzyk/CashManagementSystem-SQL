@@ -1,5 +1,6 @@
-package DBUtils;
+package Repository;
 
+import DBUtils.DBConnection;
 import Entity.Merchant;
 import Entity.Payment;
 
@@ -55,6 +56,24 @@ public class MerchantRepository {
         }
     }
 
+    public void updateSendFunds(Merchant merchant) {
+        String sql = "UPDATE merchant SET needToSend = ?, sent = ?, lastSent = ? WHERE id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            double needToSend = merchant.getNeedToSend();
+            double sent = merchant.getSent();
+            Date lastSent = java.sql.Date.valueOf(merchant.getLastSent());
+            int id = merchant.getId();
+            stm.setDouble(1, needToSend);
+            stm.setDouble(2, sent);
+            stm.setDate(3, lastSent);
+            stm.setInt(4, id);
+            stm.executeUpdate();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
