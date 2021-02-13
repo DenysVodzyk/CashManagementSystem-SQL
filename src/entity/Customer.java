@@ -1,6 +1,7 @@
-package Entity;
+package entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Customer {
 
@@ -11,6 +12,7 @@ public class Customer {
     private String ccNo;
     private String ccType;
     private LocalDate maturity;
+    private List<Payment> payments;
 
     public Customer(String name, String address, String email, String ccNo, String ccType, LocalDate maturity) {
         this.name = name;
@@ -80,6 +82,14 @@ public class Customer {
 
     public void setMaturity(LocalDate maturity) {
         this.maturity = maturity;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 
     @Override
