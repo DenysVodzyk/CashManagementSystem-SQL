@@ -1,6 +1,7 @@
-package Entity;
+package entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Merchant {
     private int id;
@@ -14,6 +15,7 @@ public class Merchant {
     private double needToSend;
     private double sent;
     private LocalDate lastSent;
+    private List<Payment> payments;
 
     public Merchant(String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
         this.name = name;
@@ -119,6 +121,14 @@ public class Merchant {
 
     public void setLastSent(LocalDate lastSent) {
         this.lastSent = lastSent;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 
     @Override
