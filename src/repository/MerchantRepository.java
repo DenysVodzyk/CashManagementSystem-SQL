@@ -11,28 +11,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerchantRepository {
+//    PaymentRepository paymentRepository = new PaymentRepository();
+
+    public Merchant getMerchant(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        String bankName = rs.getString("bankName");
+        String swift = rs.getString("swift");
+        String account = rs.getString("account");
+        double charge = rs.getDouble("charge");
+        int period = rs.getInt("period");
+        double minSum = rs.getDouble("minSum");
+        double needToSend = rs.getDouble("needToSend");
+        double sent = rs.getDouble("sent");
+        Date lastSentDate = rs.getDate("lastSent");
+        LocalDate lastSent = lastSentDate == null ? null : lastSentDate.toLocalDate();
+        return new Merchant(id, name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
+    }
+
 
     public Merchant getById(int id) {
         Merchant merchant = null;
-
         String sql = "SELECT * FROM merchant WHERE id=" + id;
-
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                String name = rs.getString("name");
-                String bankName = rs.getString("bankName");
-                String swift = rs.getString("swift");
-                String account = rs.getString("account");
-                double charge = rs.getDouble("charge");
-                int period = rs.getInt("period");
-                double minSum = rs.getDouble("minSum");
-                double needToSend = rs.getDouble("needToSend");
-                double sent = rs.getDouble("sent");
-                Date lastSentDate = rs.getDate("lastSent");
-                LocalDate lastSent = lastSentDate == null ? null : lastSentDate.toLocalDate();
-                merchant = new Merchant(id, name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
+                merchant = getMerchant(rs);
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -41,19 +46,13 @@ public class MerchantRepository {
     }
 
     public List<Merchant> getAll() {
-
         List<Merchant> merchants = new ArrayList<>();
         String sql = "SELECT * FROM merchant";
-
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                Merchant merchant = getById(id);
-
-                merchants.add(merchant);
-
+                merchants.add(getMerchant(rs));
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -74,6 +73,7 @@ public class MerchantRepository {
             e.printStackTrace();
         }
     }
+
 
     public void updateSendFunds(Merchant merchant) {
         String sql = "UPDATE merchant SET needToSend = ?, sent = ?, lastSent = ? WHERE id = ?";
@@ -99,3 +99,4 @@ public class MerchantRepository {
 
 //                List<Payment> payments = paymentRepository.getByMerchant(merchant);
 //                merchant.setPayments(payments);
+// merchant.setPayments(paymentRepository.getByMerchant(merchant));
