@@ -1,10 +1,10 @@
 package repository;
 
 import dBUtils.DBConnection;
+import entity.Customer;
 import entity.Merchant;
 import entity.Payment;
 import service.CustomerService;
-import service.MerchantService;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentRepository {
-    private CustomerService customerService = new CustomerService();
-   // private MerchantService merchantService = new MerchantService();
+    private CustomerRepository customerRepository = new CustomerRepository();
     private MerchantRepository merchantRepository = new MerchantRepository();
 
 
@@ -28,7 +27,7 @@ public class PaymentRepository {
         double sumPaid = rs.getDouble("sumPaid");
         double chargePaid = rs.getDouble("chargePaid");
 
-        return new Payment(id, dt, merchantRepository.getById(merchantId), customerService.getById(customerId), goods, sumPaid, chargePaid);
+        return new Payment(id, dt, merchantRepository.getById(merchantId), customerRepository.getById(customerId), goods, sumPaid, chargePaid);
     }
 
     private List<Payment> getPaymentsBy(List<Payment> payments, String sql) {
@@ -54,10 +53,13 @@ public class PaymentRepository {
         List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM payment WHERE merchantId=" + merchant.getId();
         return getPaymentsBy(payments, sql);
-
-
     }
 
+    public List<Payment> getByCustomer(Customer customer) {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM payment WHERE customerId=" + customer.getId();
+        return getPaymentsBy(payments, sql);
+    }
 
     //Lesson 7, clause 4
     public void addPayment(Payment payment) {
