@@ -1,12 +1,10 @@
-package ReportService;
+package reportService;
 
-import Entity.Customer;
-import Entity.Payment;
-import Service.CustomerService;
-import Service.PaymentService;
+import entity.Customer;
+import entity.Payment;
+import service.CustomerService;
+import service.PaymentService;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,19 +15,17 @@ public class CustomerReportService {
     PaymentService paymentService = new PaymentService();
     CustomerService customerService = new CustomerService();
 
-    public Customer getMostActiveCustomer(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
-        customerService.getAll();
+    public Customer getMostActiveCustomer(LocalDate startDate, LocalDate endDate) {
         int id = mostActiveCustomerId(startDate, endDate);
         return customerService.getById(id);
     }
 
-    public int mostActiveCustomerId(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
-        paymentService.getAll();
+    public int mostActiveCustomerId(LocalDate startDate, LocalDate endDate) {
         List<Integer> customersId = new ArrayList<>();
         List<Payment> paymentsFromInterval = paymentService.getPaymentFromTimeInterval(startDate, endDate);
 
         for (Payment payment : paymentsFromInterval) {
-            customersId.add(payment.getCustomerId());
+            customersId.add(payment.getCustomer().getId());
         }
         return mostCommonElement(customersId);
     }
