@@ -1,26 +1,40 @@
-package Service;
+package service;
 
-import Repository.MerchantRepository;
-import Entity.Merchant;
+import entity.Payment;
+import repository.CustomerRepository;
+import repository.MerchantRepository;
+import entity.Merchant;
+import repository.PaymentRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class MerchantService {
-    private MerchantRepository merchantRepository = new MerchantRepository();
+    private CustomerRepository customerRepository;
+    private MerchantRepository merchantRepository;
+    private PaymentRepository paymentRepository;
+
+    public MerchantService() {
+        this.customerRepository = new CustomerRepository();
+        this.merchantRepository = new MerchantRepository();
+        this.paymentRepository = new PaymentRepository();
+
+        this.customerRepository.setPaymentRepository(paymentRepository);
+        this.paymentRepository.setCustomerRepository(customerRepository);
+        this.paymentRepository.setMerchantRepository(merchantRepository);
+        this.merchantRepository.setPaymentRepository(paymentRepository);
+    }
 
     public List<Merchant> getAll() {
         return merchantRepository.getAll();
     }
 
     public Merchant getById(int id) {
-        Merchant merchantById = null;
-        for (Merchant merchant : getAll()) {
-            if (merchant.getId() == id) {
-                merchantById = merchant;
-            }
-        }
-        return merchantById;
+        return merchantRepository.getById(id, false);
+    }
+
+    public double calculateNeedToSend(Payment payment) {
+        return payment.getMerchant().getNeedToSend() + (payment.getSumPaid() - payment.getMerchant().getCharge());
     }
 
     //Lesson 7, clause 5
@@ -38,3 +52,9 @@ public class MerchantService {
 
 
 }
+
+//    private CustomerRepository cR = new CustomerRepository();
+//    private MerchantRepository mR = new MerchantRepository();
+//
+//    private PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
+//    private MerchantRepository merchantRepository = new MerchantRepository(paymentRepository);
