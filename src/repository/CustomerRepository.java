@@ -2,6 +2,7 @@ package repository;
 
 import dBUtils.DBConnection;
 import entity.Customer;
+import entity.Payment;
 
 import java.io.IOException;
 import java.sql.*;
@@ -10,8 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository {
+    PaymentRepository paymentRepository;
 
-    public Customer getCustomer(ResultSet rs) throws SQLException {
+    public void setPaymentRepository(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
+    public Customer getCustomer(ResultSet rs, boolean isPaymentKnown) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         String address = rs.getString("address");
@@ -20,8 +26,12 @@ public class CustomerRepository {
         String ccType = rs.getString("ccType");
         Date maturityDate = rs.getDate("maturity");
         LocalDate maturity = maturityDate == null ? null : maturityDate.toLocalDate();
-
-        return new Customer(id, name, address, email, ccNo, ccType, maturity);
+        Customer customer = new Customer(id, name, address, email, ccNo, ccType, maturity);
+        if (!isPaymentKnown) {
+            List<Payment> payments = paymentRepository.getByCustomer(customer);
+            customer.setPayments(payments);
+        }
+        return customer;
     }
 
     public Customer getById(int id, boolean isPaymentKnown) {
@@ -31,7 +41,7 @@ public class CustomerRepository {
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                customer = getCustomer(rs);
+                customer = getCustomer(rs, isPaymentKnown);
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -46,7 +56,7 @@ public class CustomerRepository {
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                customers.add(getCustomer(rs));
+                customers.add(getCustomer(rs, false));
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -54,3 +64,12 @@ public class CustomerRepository {
         return customers;
     }
 }
+
+
+//    public CustomerRepository() {
+//    }
+
+//    public CustomerRepository(PaymentRepository paymentRepository) {
+//        this.paymentRepository = paymentRepository;
+//    }
+
