@@ -15,8 +15,6 @@ public class Payment {
 
     public Payment(LocalDateTime dt, Merchant merchant, Customer customer, String goods, double sumPaid) {
         this.dt = dt;
-        this.merchantId = merchant.getId();
-        this.customerId = customer.getId();
         this.goods = goods;
         this.sumPaid = sumPaid;
         this.customer = customer;
@@ -43,22 +41,6 @@ public class Payment {
 
     public void setDt(LocalDateTime dt) {
         this.dt = dt;
-    }
-
-    public int getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Merchant merchant) {
-        this.merchantId = merchant.getId();
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Customer customer) {
-        this.customerId = customer.getId();
     }
 
     public String getGoods() {
