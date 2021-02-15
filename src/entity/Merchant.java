@@ -17,7 +17,16 @@ public class Merchant {
     private LocalDate lastSent;
     private List<Payment> payments;
 
-    public Merchant(String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
+    public Merchant(String name,
+                    String bankName,
+                    String swift,
+                    String account,
+                    double charge,
+                    int period,
+                    double minSum,
+                    double needToSend,
+                    double sent,
+                    LocalDate lastSent) {
         this.name = name;
         this.bankName = bankName;
         this.swift = swift;
@@ -30,7 +39,17 @@ public class Merchant {
         this.lastSent = lastSent;
     }
 
-    public Merchant(int id, String name, String bankName, String swift, String account, double charge, int period, double minSum, double needToSend, double sent, LocalDate lastSent) {
+    public Merchant(int id,
+                    String name,
+                    String bankName,
+                    String swift,
+                    String account,
+                    double charge,
+                    int period,
+                    double minSum,
+                    double needToSend,
+                    double sent,
+                    LocalDate lastSent) {
         this(name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
         this.id = id;
     }
