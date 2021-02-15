@@ -1,57 +1,58 @@
 import entity.Customer;
 import entity.Merchant;
 import entity.Payment;
-import reportService.CustomerReportService;
-import reportService.MerchantReportService;
 import repository.CustomerRepository;
 import repository.MerchantRepository;
 import repository.PaymentRepository;
-import service.CustomerService;
-import service.MerchantService;
-import service.PaymentService;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class PrintReport {
 
     public void execute() {
-        CustomerRepository customerRepository = new CustomerRepository();
-        MerchantRepository merchantRepository = new MerchantRepository();
-//        PaymentRepository paymentRepository = new PaymentRepository();
+        CustomerRepository cR = new CustomerRepository();
+        MerchantRepository mR = new MerchantRepository();
+        PaymentRepository pR = new PaymentRepository();
 
-        for (Customer customer : customerRepository.getAll())
+        PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
+        MerchantRepository merchantRepository = new MerchantRepository(paymentRepository);
+
+
+        System.out.println("Customers:");
+        for (Customer customer : cR.getAll())
             System.out.println(customer);
 
         System.out.println("");
 
-        System.out.println(customerRepository.getById(2));
+        System.out.println(cR.getById(2, false));
 
-        System.out.println("Merchant check");
+        System.out.println("Merchants: ");
 
         for (Merchant merchant : merchantRepository.getAll())
             System.out.println(merchant);
 
+        System.out.println("Payments: ");
+        List<Payment> payments = paymentRepository.getAll();
+        for (Payment payment : payments)
+            System.out.println(payment);
+
+
+        System.out.println(merchantRepository.getById(2, false));
         System.out.println("");
 
-        System.out.println(merchantRepository.getById(2));
+
+        List<Merchant> merchants = merchantRepository.getAll();
+        for (Merchant merchant : merchants)
+            System.out.println(merchant);
+
+        System.out.println("");
 
 
-//
-//        List<Merchant> merchants = merchantRepository.getAll();
-//        for (Merchant merchant : merchants)
-//            System.out.println(merchant);
-//
-//        System.out.println("");
-//
-//        List<Payment> payments = paymentRepository.getAll();
-//        for (Payment payment : payments)
-//            System.out.println(payment);
-//
+        System.out.println(merchantRepository.getById(2, false).getPayments());
+
 //        System.out.println("merchant2 payments: !!! ");
-
-
+//
+//
 //        for (Merchant merchant : merchants) {
 //            if (merchant.getId() == 2) {
 //                for (Payment payment : merchant.getPayments())
@@ -74,7 +75,7 @@ public class PrintReport {
         MerchantService merchantService = new MerchantService();
 
 
-        PaymentRepository paymentRepository = new PaymentRepository();
+        PaymentRepository pR = new PaymentRepository();
 
 
         //Display all payment table
@@ -93,14 +94,14 @@ public class PrintReport {
         System.out.println("Payment by merchant: " + merchant.getId());
         MerchantRepository merchantRepository = new MerchantRepository();
 
-        for (Payment payment : paymentRepository.getByMerchant(merchantRepository.getById(2)))
+        for (Payment payment : pR.getByMerchant(merchantRepository.getById(2)))
             System.out.println(payment);
 
         System.out.println("");
         System.out.println("Payments by merchant 2: ");
-        paymentRepository.getAll();
-        paymentRepository.getByMerchant(merchant);
-        merchantRepository.getAll(paymentRepository);
+        pR.getAll();
+        pR.getByMerchant(merchant);
+        merchantRepository.getAll(pR);
 
 //        for(Payment payment: merchant.getPayments())
 //            System.out.println(payment);
@@ -129,17 +130,17 @@ public class PrintReport {
 //        paymentService.addPayment(newPayment);
 
         //Display all merchants table
-        for (Merchant m : merchantService.getAll(paymentRepository)) {
+        for (Merchant m : merchantService.getAll(pR)) {
             System.out.println(m);
         }
         System.out.println("");
 
         //send funds to merchant - Clause 5
-        merchantService.sendFunds(paymentRepository);
+        merchantService.sendFunds(pR);
 
 
         //Display all merchants table
-        for (Merchant m : merchantService.getAll(paymentRepository)) {
+        for (Merchant m : merchantService.getAll(pR)) {
             System.out.println(m);
         }
         System.out.println("");
