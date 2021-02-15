@@ -13,10 +13,7 @@ import java.util.List;
 public class MerchantRepository {
     PaymentRepository paymentRepository;
 
-    public MerchantRepository() {
-    }
-
-    public MerchantRepository(PaymentRepository paymentRepository) {
+    public void setPaymentRepository(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
 
@@ -41,7 +38,6 @@ public class MerchantRepository {
         }
         return merchant;
     }
-
 
     public Merchant getById(int id, boolean isPaymentKnown) {
         Merchant merchant = null;
@@ -71,7 +67,6 @@ public class MerchantRepository {
             e.printStackTrace();
         }
         return merchants;
-
     }
 
     //Lesson 7, clause 4
@@ -82,7 +77,6 @@ public class MerchantRepository {
              PreparedStatement stm = con.prepareStatement(sql)) {
             stm.setDouble(1, payment.getMerchant().getNeedToSend());
             stm.setInt(2, payment.getMerchant().getId());
-            //check payment.getMerchant.getId
             stm.executeUpdate();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -110,3 +104,11 @@ public class MerchantRepository {
     }
 
 }
+
+
+//    public MerchantRepository() {
+//    }
+//
+//    public MerchantRepository(PaymentRepository paymentRepository) {
+//        this.paymentRepository = paymentRepository;
+//    }
