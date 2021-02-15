@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 public class Payment {
     private int id;
     private LocalDateTime dt;
-    private int merchantId;
-    private int customerId;
     private String goods;
     private double sumPaid;
     private double chargePaid;
@@ -88,8 +86,6 @@ public class Payment {
         return "Payment{" +
                 "id=" + id +
                 ", dt=" + dt +
-                ", merchantId=" + merchantId +
-                ", customerId=" + customerId +
                 ", goods='" + goods + '\'' +
                 ", sumPaid=" + sumPaid +
                 ", chargePaid=" + chargePaid +
