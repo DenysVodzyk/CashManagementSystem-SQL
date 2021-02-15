@@ -4,7 +4,6 @@ import dBUtils.DBConnection;
 import entity.Customer;
 import entity.Merchant;
 import entity.Payment;
-import service.CustomerService;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,11 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentRepository {
-    private CustomerRepository customerRepository = new CustomerRepository();
-    private MerchantRepository merchantRepository = new MerchantRepository();
+    private CustomerRepository customerRepository;
+    private MerchantRepository merchantRepository;
 
+    public PaymentRepository() {
+    }
 
-    public Payment getPayment(ResultSet rs) throws SQLException {
+    public PaymentRepository(CustomerRepository customerRepository, MerchantRepository merchantRepository) {
+        this.customerRepository = customerRepository;
+        this.merchantRepository = merchantRepository;
+    }
+
+    public Payment getPayment(ResultSet rs, boolean isMerchantFetchRequired) throws SQLException {
         int id = rs.getInt("id");
         Timestamp dtStamp = rs.getTimestamp("dt");
         LocalDateTime dt = dtStamp.toLocalDateTime();
@@ -27,21 +33,57 @@ public class PaymentRepository {
         double sumPaid = rs.getDouble("sumPaid");
         double chargePaid = rs.getDouble("chargePaid");
 
-        return new Payment(id, dt, merchantRepository.getById(merchantId), customerRepository.getById(customerId), goods, sumPaid, chargePaid);
+        return new Payment(id,
+                dt,
+                isMerchantFetchRequired ? merchantRepository.getById(merchantId, true) : null,
+                isMerchantFetchRequired ? customerRepository.getById(customerId, true) : null,
+                goods,
+                sumPaid,
+                chargePaid);
+
+        //TODO add Customer and Merchant to each Payment manually
     }
+
+    public Payment getPaymentWithoutMerchantCustomer(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        Timestamp dtStamp = rs.getTimestamp("dt");
+        LocalDateTime dt = dtStamp.toLocalDateTime();
+        int merchantId = rs.getInt("merchantId");
+        int customerId = rs.getInt("customerId");
+        String goods = rs.getString("goods");
+        double sumPaid = rs.getDouble("sumPaid");
+        double chargePaid = rs.getDouble("chargePaid");
+
+        return new Payment(id, dt, null, null, goods, sumPaid, chargePaid);
+    }
+
 
     private List<Payment> getPaymentsBy(List<Payment> payments, String sql) {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                payments.add(getPayment(rs));
+                payments.add(getPayment(rs, true));
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         return payments;
     }
+
+    private List<Payment> getPaymentsByWithoutMerchantCustomer(List<Payment> payments, String sql) {
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                payments.add(getPaymentWithoutMerchantCustomer(rs));
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        return payments;
+    }
+
 
     public List<Payment> getAll() {
         List<Payment> payments = new ArrayList<>();
@@ -52,7 +94,12 @@ public class PaymentRepository {
     public List<Payment> getByMerchant(Merchant merchant) {
         List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM payment WHERE merchantId=" + merchant.getId();
-        return getPaymentsBy(payments, sql);
+
+        List<Payment> paymentsByWithoutMerchantCustomer = getPaymentsByWithoutMerchantCustomer(payments, sql);
+        for (Payment payment : paymentsByWithoutMerchantCustomer) {
+            payment.setMerchant(merchant);
+        }
+        return paymentsByWithoutMerchantCustomer;
     }
 
     public List<Payment> getByCustomer(Customer customer) {
@@ -69,8 +116,8 @@ public class PaymentRepository {
              PreparedStatement stm = con.prepareStatement(sql)) {
             java.sql.Timestamp dt = java.sql.Timestamp.valueOf(payment.getDt());
             stm.setTimestamp(1, dt);
-            stm.setInt(2, payment.getMerchantId());
-            stm.setInt(3, payment.getCustomerId());
+            stm.setInt(2, payment.getMerchant().getId());
+            stm.setInt(3, payment.getCustomer().getId());
             stm.setString(4, payment.getGoods());
             stm.setDouble(5, payment.getSumPaid());
             payment.setChargePaid(payment.getSumPaid() * payment.getMerchant().getCharge() / 100);
@@ -81,57 +128,9 @@ public class PaymentRepository {
             e.printStackTrace();
         }
     }
-
-//    public List<Payment> getAll() {
-//        List<Payment> payments = new ArrayList<>();
-//        String sql = "SELECT * FROM payment";
-//
-//        try (Connection con = DBConnection.getConnection();
-//             PreparedStatement stm = con.prepareStatement(sql)) {
-//            ResultSet rs = stm.executeQuery();
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                Timestamp dtStamp = rs.getTimestamp("dt");
-//                LocalDateTime dt = dtStamp.toLocalDateTime();
-//                int merchantId = rs.getInt("merchantId");
-//                int customerId = rs.getInt("customerId");
-//                String goods = rs.getString("goods");
-//                double sumPaid = rs.getDouble("sumPaid");
-//                double chargePaid = rs.getDouble("chargePaid");
-//
-//                payments.add(new Payment(id, dt, merchantService.getById(merchantId), customerService.getById(customerId), goods, sumPaid, chargePaid));
-//            }
-//        } catch (IOException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return payments;
-//    }
-
-
-//    public List<Payment> getByMerchant(Merchant merchant) {
-//        String sql = "SELECT * FROM payment WHERE ?";
-//
-//        List<Payment> payments = new ArrayList<>();
-//
-//        try (Connection con = DBConnection.getConnection();
-//             PreparedStatement stm = con.prepareStatement(sql)) {
-//            stm.setInt(1, merchant.getId());
-//            ResultSet rs = stm.executeQuery();
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                Timestamp dtStamp = rs.getTimestamp("dt");
-//                LocalDateTime dt = dtStamp.toLocalDateTime();
-//                int merchantId = rs.getInt("merchantId");
-//                int customerId = rs.getInt("customerId");
-//                String goods = rs.getString("goods");
-//                double sumPaid = rs.getDouble("sumPaid");
-//                double chargePaid = rs.getDouble("chargePaid");
-//
-//                payments.add(new Payment(id, dt, merchant, customerService.getById(customerId), goods, sumPaid, chargePaid));
-//            }
-//        } catch (SQLException | IOException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return payments;
-//    }
 }
+
+//
+//        if (merchant == null) {
+//                return getPaymentsBy(payments, sql);
+//                }

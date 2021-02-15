@@ -24,7 +24,7 @@ public class CustomerRepository {
         return new Customer(id, name, address, email, ccNo, ccType, maturity);
     }
 
-    public Customer getById(int id) {
+    public Customer getById(int id, boolean isPaymentKnown) {
         Customer customer = null;
         String sql = "SELECT * FROM customer WHERE id=" + id;
         try (Connection con = DBConnection.getConnection();

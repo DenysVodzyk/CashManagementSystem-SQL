@@ -11,9 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerchantRepository {
-//    PaymentRepository paymentRepository = new PaymentRepository();
+    PaymentRepository paymentRepository;
 
-    public Merchant getMerchant(ResultSet rs) throws SQLException {
+    public MerchantRepository() {
+    }
+
+    public MerchantRepository(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
+    public Merchant getMerchant(ResultSet rs, boolean isPaymentKnown) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         String bankName = rs.getString("bankName");
@@ -26,18 +33,24 @@ public class MerchantRepository {
         double sent = rs.getDouble("sent");
         Date lastSentDate = rs.getDate("lastSent");
         LocalDate lastSent = lastSentDate == null ? null : lastSentDate.toLocalDate();
-        return new Merchant(id, name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
+        Merchant merchant = new Merchant(id, name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
+
+        if (!isPaymentKnown) {
+            List<Payment> payments = paymentRepository.getByMerchant(merchant);
+            merchant.setPayments(payments);
+        }
+        return merchant;
     }
 
 
-    public Merchant getById(int id) {
+    public Merchant getById(int id, boolean isPaymentKnown) {
         Merchant merchant = null;
         String sql = "SELECT * FROM merchant WHERE id=" + id;
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                merchant = getMerchant(rs);
+                merchant = getMerchant(rs, isPaymentKnown);
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -52,12 +65,13 @@ public class MerchantRepository {
              PreparedStatement stm = con.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                merchants.add(getMerchant(rs));
+                merchants.add(getMerchant(rs, false));
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         return merchants;
+
     }
 
     //Lesson 7, clause 4
@@ -67,7 +81,8 @@ public class MerchantRepository {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stm = con.prepareStatement(sql)) {
             stm.setDouble(1, payment.getMerchant().getNeedToSend());
-            stm.setInt(2, payment.getMerchantId());
+            stm.setInt(2, payment.getMerchant().getId());
+            //check payment.getMerchant.getId
             stm.executeUpdate();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -95,8 +110,3 @@ public class MerchantRepository {
     }
 
 }
-
-
-//                List<Payment> payments = paymentRepository.getByMerchant(merchant);
-//                merchant.setPayments(payments);
-// merchant.setPayments(paymentRepository.getByMerchant(merchant));
