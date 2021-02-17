@@ -31,7 +31,3 @@ public class CustomerService {
     }
 
 }
-
-//
-//    private PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
-//    private CustomerRepository customerRepository = new CustomerRepository(paymentRepository);
