@@ -20,7 +20,6 @@ public class PaymentService {
         this.merchantRepository = new MerchantRepository();
         this.paymentRepository = new PaymentRepository();
 
-        this.customerRepository.setPaymentRepository(paymentRepository);
         this.paymentRepository.setCustomerRepository(customerRepository);
         this.paymentRepository.setMerchantRepository(merchantRepository);
         this.merchantService = new MerchantService();
@@ -47,9 +46,3 @@ public class PaymentService {
         return true;
     }
 }
-
-
-//    private CustomerRepository cR = new CustomerRepository();
-//    private MerchantRepository mR = new MerchantRepository();
-//
-//    private PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
