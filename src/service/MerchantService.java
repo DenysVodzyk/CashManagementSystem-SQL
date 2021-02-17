@@ -19,7 +19,6 @@ public class MerchantService {
         this.merchantRepository = new MerchantRepository();
         this.paymentRepository = new PaymentRepository();
 
-        this.customerRepository.setPaymentRepository(paymentRepository);
         this.paymentRepository.setCustomerRepository(customerRepository);
         this.paymentRepository.setMerchantRepository(merchantRepository);
         this.merchantRepository.setPaymentRepository(paymentRepository);
@@ -49,12 +48,5 @@ public class MerchantService {
             }
         }
     }
-
-
 }
 
-//    private CustomerRepository cR = new CustomerRepository();
-//    private MerchantRepository mR = new MerchantRepository();
-//
-//    private PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
-//    private MerchantRepository merchantRepository = new MerchantRepository(paymentRepository);
