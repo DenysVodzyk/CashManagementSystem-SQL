@@ -64,12 +64,3 @@ public class CustomerRepository {
         return customers;
     }
 }
-
-
-//    public CustomerRepository() {
-//    }
-
-//    public CustomerRepository(PaymentRepository paymentRepository) {
-//        this.paymentRepository = paymentRepository;
-//    }
-
