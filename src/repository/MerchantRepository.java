@@ -102,13 +102,4 @@ public class MerchantRepository {
             e.printStackTrace();
         }
     }
-
 }
-
-
-//    public MerchantRepository() {
-//    }
-//
-//    public MerchantRepository(PaymentRepository paymentRepository) {
-//        this.paymentRepository = paymentRepository;
-//    }
