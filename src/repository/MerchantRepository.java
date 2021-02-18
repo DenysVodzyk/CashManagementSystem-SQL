@@ -1,6 +1,6 @@
 package repository;
 
-import dBUtils.DBConnection;
+import utils.DBConnection;
 import entity.Merchant;
 import entity.Payment;
 
