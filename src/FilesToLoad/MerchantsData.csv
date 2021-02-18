@@ -1,0 +1,6 @@
+name,bankName,swiftCode,accountNumber,chargePercentage,period,minSum,needToSend,sentAmount,lastSent
+Amazon,RBC,100132,122000247,1.5,1,10000.50,0,0,null
+BikeShop,BankOfAmerica,100133,122000248,5.3,2,3000,0,0,null
+Alibaba,HSBC,100134,122000249,0.5,3,50500.00,0,0,null
+LinenShop,PrivatBank,100135,122000250,4.8,2,4750,0,0,null
+Amazon,RBC,100132,122000247,1.5,1,10000.50,0,0,null
