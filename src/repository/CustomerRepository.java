@@ -63,4 +63,23 @@ public class CustomerRepository {
         }
         return customers;
     }
+
+    public void addCustomer(Customer customer) {
+        String sql = "INSERT INTO customer(name, address, email, ccNo, ccType, maturity) VALUES (?,?,?,?,?,?)";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            stm.setString(1, customer.getName());
+            stm.setString(2, customer.getAddress());
+            stm.setString(3, customer.getEmail());
+            stm.setString(4, customer.getCcNo());
+            stm.setString(5, customer.getCcType());
+            java.sql.Date date = java.sql.Date.valueOf(customer.getMaturity());
+            stm.setDate(6, date);
+            stm.executeUpdate();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
