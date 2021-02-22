@@ -1,5 +1,6 @@
 package repository;
 
+import entity.Customer;
 import utils.DBConnection;
 import entity.Merchant;
 import entity.Payment;
@@ -83,7 +84,6 @@ public class MerchantRepository {
         }
     }
 
-
     public void updateSendFunds(Merchant merchant) {
         String sql = "UPDATE merchant SET needToSend = ?, sent = ?, lastSent = ? WHERE id = ?";
 
@@ -102,4 +102,30 @@ public class MerchantRepository {
             e.printStackTrace();
         }
     }
+
+    public void addMerchant(Merchant merchant) {
+        String sql = "INSERT INTO merchant(name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent) VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            stm.setString(1, merchant.getName());
+            stm.setString(2, merchant.getBankName());
+            stm.setString(3, merchant.getSwift());
+            stm.setString(4, merchant.getAccount());
+            stm.setDouble(5, merchant.getCharge());
+            stm.setInt(6, merchant.getPeriod());
+            stm.setDouble(7, merchant.getMinSum());
+            stm.setDouble(8, merchant.getNeedToSend());
+            stm.setDouble(9, merchant.getSent());
+            java.sql.Date sent = null;
+            if (merchant.getLastSent() != null) {
+                sent = java.sql.Date.valueOf(merchant.getLastSent());
+            }
+            stm.setDate(10, sent);
+            stm.executeUpdate();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
