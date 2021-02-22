@@ -2,6 +2,7 @@ package entity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Customer {
 
@@ -103,5 +104,23 @@ public class Customer {
                 ", ccType='" + ccType + '\'' +
                 ", maturity=" + maturity +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(name, customer.name) &&
+                Objects.equals(address, customer.address) &&
+                Objects.equals(email, customer.email) &&
+                Objects.equals(ccNo, customer.ccNo) &&
+                Objects.equals(ccType, customer.ccType) &&
+                Objects.equals(maturity, customer.maturity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, address, email, ccNo, ccType, maturity);
     }
 }
