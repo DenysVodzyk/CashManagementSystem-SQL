@@ -2,6 +2,7 @@ package entity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Merchant {
     private int id;
@@ -165,5 +166,27 @@ public class Merchant {
                 ", sent=" + sent +
                 ", lastSent=" + lastSent +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Merchant merchant = (Merchant) o;
+        return Double.compare(merchant.charge, charge) == 0 &&
+                period == merchant.period &&
+                Double.compare(merchant.minSum, minSum) == 0 &&
+                Double.compare(merchant.needToSend, needToSend) == 0 &&
+                Double.compare(merchant.sent, sent) == 0 &&
+                Objects.equals(name, merchant.name) &&
+                Objects.equals(bankName, merchant.bankName) &&
+                Objects.equals(swift, merchant.swift) &&
+                Objects.equals(account, merchant.account) &&
+                Objects.equals(lastSent, merchant.lastSent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, bankName, swift, account, charge, period, minSum, needToSend, sent, lastSent);
     }
 }
