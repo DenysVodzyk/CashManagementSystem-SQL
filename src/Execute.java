@@ -9,6 +9,7 @@ import service.PaymentService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class Execute {
@@ -20,9 +21,15 @@ public class Execute {
         MerchantReportService merchantReportService = new MerchantReportService();
         CustomerReportService customerReportService = new CustomerReportService();
 
+        //Collections:
+        List<Payment> payments = paymentService.getAll();
+        List<Merchant> merchants = merchantService.getAll();
+        List<Customer> customers = customerService.getAll();
+
+
         //Display all payment table
         System.out.println("All payment table: ");
-        for (Payment p : paymentService.getAll()) {
+        for (Payment p : payments) {
             System.out.println(p);
         }
         System.out.println("");
@@ -58,13 +65,13 @@ public class Execute {
 
         //Display all payment table
         System.out.println("All payment table: ");
-        for (Payment p : paymentService.getAll()) {
+        for (Payment p : payments) {
             System.out.println(p);
         }
         System.out.println("");
 
         //Display all merchants table
-        for (Merchant m : merchantService.getAll()) {
+        for (Merchant m : merchants) {
             System.out.println(m);
         }
         System.out.println("");
@@ -74,7 +81,7 @@ public class Execute {
 
 
         //Display all merchants table
-        for (Merchant m : merchantService.getAll()) {
+        for (Merchant m : merchants) {
             System.out.println(m);
         }
         System.out.println("");
@@ -84,71 +91,14 @@ public class Execute {
         Customer mostActive = customerReportService.getMostActiveCustomer(LocalDate.of(2012, 06, 22), LocalDate.of(2012, 07, 02));
         System.out.println("Most active customer: " + mostActive);
 
+        //Add customers from file - Clause 8
+        //Add customers from file:
+        String customersFilePath = "src/filesToLoad/CustomersData.csv";
+        customerService.addCustomer(customersFilePath);
+
+        //Add merchants from file:
+        String merchantsFilePath = "src/filesToLoad/MerchantsData.csv";
+        merchantService.addMerchant(merchantsFilePath);
+
     }
 }
-
-
-//2021-02-15
-
-/*  CustomerRepository cR = new CustomerRepository();
-        MerchantRepository mR = new MerchantRepository();
-
-        PaymentRepository paymentRepository = new PaymentRepository(cR, mR);
-        MerchantRepository merchantRepository = new MerchantRepository(paymentRepository);
-        CustomerRepository customerRepository = new CustomerRepository(paymentRepository);
-
-
-        System.out.println("Customers:");
-        for (Customer customer : customerRepository.getAll())
-            System.out.println(customer);
-
-        System.out.println("");
-
-        System.out.println(customerRepository.getById(2, false));
-        System.out.println();
-        for(Payment payment: customerRepository.getById(2, false).getPayments())
-            System.out.println(payment);
-
-
-        System.out.println("Merchants: ");
-
-        for (Merchant merchant : merchantRepository.getAll())
-            System.out.println(merchant);
-
-        System.out.println("Payments: ");
-        List<Payment> payments = paymentRepository.getAll();
-        for (Payment payment : payments)
-            System.out.println(payment);
-
-
-        System.out.println(merchantRepository.getById(2, false));
-        System.out.println("");
-
-
-        List<Merchant> merchants = merchantRepository.getAll();
-        for (Merchant merchant : merchants)
-            System.out.println(merchant);
-
-        System.out.println("");
-
-
-        System.out.println(merchantRepository.getById(2, false).getPayments());*/
-//
-//for (Payment payment : paymentService.getAll()) {
-//        System.out.println(payment);
-//        }
-//        System.out.println();
-//
-//        for (Merchant merchant : merchantService.getAll()) {
-//        System.out.println(merchant);
-//        }
-//        System.out.println(merchantService.getById(2));
-//        System.out.println(merchantService.getById(2).getPayments());
-//        System.out.println();
-//
-//        for (Customer customer : customerService.getAll()) {
-//        System.out.println(customer);
-//        }
-//        System.out.println(customerService.getById(2));
-//        System.out.println(customerService.getById(2).getPayments());
-//        System.out.println();
