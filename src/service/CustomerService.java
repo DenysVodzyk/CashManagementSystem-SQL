@@ -33,6 +33,11 @@ public class CustomerService {
         return customerRepository.getById(id, false);
     }
 
+    public Customer getByName(String name) {
+        return customerRepository.getByName(name, false);
+    }
+
+
     public List<Customer> getCustomersFromFile(String filePath) {
         List<String> data = FileReader.readFromFile(filePath);
         List<Customer> customers = new ArrayList<>();
