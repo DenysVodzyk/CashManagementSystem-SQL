@@ -49,6 +49,22 @@ public class CustomerRepository {
         return customer;
     }
 
+    public Customer getByName(String name, boolean isPaymentKnown) {
+        Customer customer = null;
+        String sql = "SELECT * FROM customer WHERE name=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            stm.setString(1, name);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                customer = getCustomer(rs, isPaymentKnown);
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
     public List<Customer> getAll() {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM customer";
