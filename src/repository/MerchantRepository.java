@@ -55,6 +55,23 @@ public class MerchantRepository {
         return merchant;
     }
 
+    public Merchant getByName(String name, boolean isPaymentKnown) {
+        Merchant merchant = null;
+        String sql = "SELECT * FROM merchant WHERE name= ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stm = con.prepareStatement(sql)) {
+            stm.setString(1, name);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                merchant = getMerchant(rs, isPaymentKnown);
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        return merchant;
+    }
+
+
     public List<Merchant> getAll() {
         List<Merchant> merchants = new ArrayList<>();
         String sql = "SELECT * FROM merchant";
