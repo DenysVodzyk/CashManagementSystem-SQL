@@ -100,5 +100,8 @@ public class Execute {
         String merchantsFilePath = "src/filesToLoad/MerchantsData.csv";
         merchantService.addMerchant(merchantsFilePath);
 
+        //Add payments from file:
+        String paymentsFilePath = "src/filesToLoad/PaymentsData.csv";
+        paymentService.addPaymentFromFile(paymentsFilePath);
     }
 }
