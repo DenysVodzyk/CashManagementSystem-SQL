@@ -34,6 +34,10 @@ public class MerchantService {
         return merchantRepository.getById(id, false);
     }
 
+    public Merchant getByName(String name) {
+        return merchantRepository.getByName(name, false);
+    }
+
     public double calculateNeedToSend(Payment payment) {
         return payment.getMerchant().getNeedToSend() + (payment.getSumPaid() - payment.getMerchant().getCharge());
     }
